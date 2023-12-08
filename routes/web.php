@@ -190,9 +190,9 @@ Route::get('finalDeleteOfNews/{id}',[NewsController::class, 'finalDeleteOfNews']
 
 // Route::get('finalDeletePost/{id}',[PostController::class, 'finalDeletePost']);
 
-// task9
-// places section
-// Route::get('places',[PlaceController::class, 'index']);
+// ===============task9========
+// ============places section==================
+ Route::get('places',[PlaceController::class, 'index']);
 Route::get("addplace",[PlaceController::class, "create"]);
 Route::post("addtheplace",[PlaceController::class, "store"])->name("addplace");
 //  Route::get("showplace",[PlaceController::class, "index"]);
