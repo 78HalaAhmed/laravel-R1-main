@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('places', function (Blueprint $table) {
             $table->id();
-            $table->string("title", 50);
-            $table->text("content");
-            $table->boolean("published");
-            $table->softDeletes();
+            $table->string("title", 100);
+            $table->text("description");
+            $table->float('priceFrom');
+            $table->float('priceTo');
+            $table->string("image", 200);
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('_places');
     }
 };

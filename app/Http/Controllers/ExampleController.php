@@ -19,6 +19,15 @@ class ExampleController extends Controller
     public function showupload() {
         return view("upload");
     }
+
+        public function place() {
+            return view("place");
+        }
+        public function blog() {
+            return view("blog");
+        }
+    
+    
     public function upload(Request $request) {
         // $file_extension = $request->image->getClientOriginalExtension();
         // $file_name = time() . '.' . $file_extension;

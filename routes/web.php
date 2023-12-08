@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExampleController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\PostController;
 
 /*
@@ -119,6 +120,8 @@ Route::get('/', function () {
 // Route::get("addCarForm",[ExampleController::class, "addCarForm"]);
  Route::get('showupload',[ExampleController::class,'showupload']);
  Route::post('upload',[ExampleController::class, 'upload'])->name('upload');
+//  Route::get('place',[ExampleController::class,'place']);
+ Route::get('blog',[ExampleController::class,'blog']);
 
 // Route::post("carInfo",[ExampleController::class, "showCarInfo"])->name("carInfo");
 
@@ -186,3 +189,11 @@ Route::get('finalDeleteOfNews/{id}',[NewsController::class, 'finalDeleteOfNews']
 // Route::get('restorePost/{id}',[PostController::class, 'restorePost']);
 
 // Route::get('finalDeletePost/{id}',[PostController::class, 'finalDeletePost']);
+
+// task9
+// places section
+// Route::get('places',[PlaceController::class, 'index']);
+Route::get("addplace",[PlaceController::class, "create"]);
+Route::post("addtheplace",[PlaceController::class, "store"])->name("addplace");
+//  Route::get("showplace",[PlaceController::class, "index"]);
+ Route::get("limit",[PlaceController::class, "limit"]);
