@@ -192,8 +192,12 @@ Route::get('finalDeleteOfNews/{id}',[NewsController::class, 'finalDeleteOfNews']
 
 // ===============task9========
 // ============places section==================
- Route::get('places',[PlaceController::class, 'index']);
+//  Route::get('places',[PlaceController::class, 'index']);
 Route::get("addplace",[PlaceController::class, "create"]);
 Route::post("addtheplace",[PlaceController::class, "store"])->name("addplace");
 //  Route::get("showplace",[PlaceController::class, "index"]);
  Route::get("limit",[PlaceController::class, "limit"]);
+ Route::get("placeslist",[PlaceController::class, "index"]);
+ Route::get('deleteplace/{id}',[PlaceController::class, 'destroy']);
+  Route::get('placedetail/{id}',[PlaceController::class, 'show']);
+

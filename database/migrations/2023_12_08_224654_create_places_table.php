@@ -18,6 +18,8 @@ return new class extends Migration
             $table->float('priceFrom');
             $table->float('priceTo');
             $table->string("image", 200);
+            $table->softDeletes();
+            
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('_places');
+        Schema::dropIfExists('places');
     }
 };

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use App\Models\Place;
 use App\Traits\Common;
 
@@ -14,11 +15,11 @@ class PlaceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    // public function index()
-    // {
-    //     $places = Place::get();
-    //     return view('place', compact('places'));
-    // }
+    public function index()
+     {
+        $places = Place::get();
+        return view('placeslist', compact('places'));
+     }
     public function limit(){
         $places = Place::orderBy('created_at','desc')->take(6)->get();
         return view('place', compact('places'));
@@ -57,7 +58,8 @@ class PlaceController extends Controller
      */
     public function show(string $id)
     {
-        
+        $places = Place::findOrFail($id);
+        return view('placedetail', compact('places'));
     }
 
     /**
@@ -79,8 +81,9 @@ class PlaceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id): RedirectResponse
     {
-        //
+        Place::where('id', $id)->delete();        
+        return redirect('placeslist');
     }
 }
