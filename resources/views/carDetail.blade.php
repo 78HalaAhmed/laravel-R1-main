@@ -15,5 +15,7 @@
     @else
     It is not published.
     @endif
+    <br>
+    category:{{$car->category->categoryName}}
 </body>
 </html>

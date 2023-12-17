@@ -29,9 +29,23 @@
       </div> 
       <div class="form-group">
             <label for="image">Image:</label>
-            <input type="file" class="form-control" id="image" name="image" value="{{ $car->image  }}" >
-            <img src="assets/images/{{ $car->image }}" width="100px">
+            <input type="file" class="form-control" id="image" name="image" value="{{ old('image') }}" >
+            <img src="{{ asset('assets/images/'.$car->image) }}" width="100px">
         </div>
+        <div>
+        <div class="form-group">
+      <label for="image">Categories:</label>
+        <select name="category_id">
+          @foreach($categories as $category)
+          <option value="{{ $category->id }}"> {{$category->categoryName}} </option>
+          @endforeach
+        </select>
+        @error('category_id')
+        <div class='alert alert-warning'>
+          {{ $message }}
+        </div>
+        @enderror
+    </div>
     <div class="checkbox">
       <label><input type="checkbox" name="published" @checked($car->published)> Published</label>
     </div>

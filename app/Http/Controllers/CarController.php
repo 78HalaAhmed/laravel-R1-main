@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Car;
+use App\Models\Category;
 use App\Traits\Common;
 use Illuminate\Support\Facades\Redirect;
 use Spatie\Backtrace\File;
@@ -27,8 +28,9 @@ class CarController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {
-        return view('addCar');
+    {  
+        $categories=Category::select('id','categoryName')->get();
+        return view('addCar',compact('categories'));
     }
 
     /**
@@ -42,6 +44,7 @@ class CarController extends Controller
             'carTitle'=>'required|string',
             'description'=>'required|string|max:100',
             'image' => 'required|mimes:png,jpg,jpeg|max:2048',
+            'category_id' => 'required',
         ],$message);  
         $fileName = $this->uploadFile($request->image, 'assets/images');
         $data['image']= $fileName;
@@ -76,7 +79,8 @@ class CarController extends Controller
     public function edit(string $id)
     {
         $car = Car::findOrFail($id);
-        return view('updateCar', compact('car'));
+        $categories = Category::select('id', 'categoryName')->get();
+        return view('updateCar', compact('car', 'categories'));
     }
 
     /**
@@ -94,10 +98,12 @@ class CarController extends Controller
         'carTitle'=>'required|string',
             'description'=>'required|string|max:100',
             'image' => 'required|mimes:png,jpg,jpeg|max:5000',
+            'category_id' => 'required',
     ],$message);
     $cars = Car::find($id);
     $cars->carTitle = $request->get('carTitle');
     $cars->description = $request->get('description');
+    $cars->category_id = $request->get('category_id');
     if ($request->hasFile('image')) {
         
         $imageName = time().'.'.$request->image->extension();  
