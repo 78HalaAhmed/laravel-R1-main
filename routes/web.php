@@ -5,6 +5,7 @@ use App\Http\Controllers\ExampleController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PlaceController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 
 /*
@@ -201,3 +202,13 @@ Route::post("addtheplace",[PlaceController::class, "store"])->name("addplace");
  Route::get('deleteplace/{id}',[PlaceController::class, 'destroy']);
   Route::get('placedetail/{id}',[PlaceController::class, 'show']);
 
+
+Auth::routes(['verify'=>true]);
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get("contact",[HomeController::class, "showcontact"]);
+Route::post("contact",[HomeController::class, "sendmail"])->name("contact us");

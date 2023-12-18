@@ -34,10 +34,10 @@
         </div>
         <div>
         <div class="form-group">
-      <label for="image">Categories:</label>
+      <label for="category_id">Categories:</label>
         <select name="category_id">
           @foreach($categories as $category)
-          <option value="{{ $category->id }}"> {{$category->categoryName}} </option>
+          <option value="{{ $category->id }}" @selected( $category->id == $car->category_id)>{{$category->categoryName}} </option>
           @endforeach
         </select>
         @error('category_id')

@@ -86,33 +86,36 @@ class CarController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): RedirectResponse
+    public function update(Request $request, string $id)
     {
-        $data = $request->only($this->columns);
-        $data['published'] = isset($data['published'])? true : false;
-        Car::where('id', $id)->update($data);        
-        
-    $message=['carTitle.required'=>'CarTitle is required',
-        'description.required'=> 'should be text','image.required'=>'image required','price.required'=>'price required' ];
-    $data=$request->validate([
-        'carTitle'=>'required|string',
-            'description'=>'required|string|max:100',
-            'image' => 'required|mimes:png,jpg,jpeg|max:5000',
+        $messages= $this->messages();
+
+        $data = $request->validate([
+            'carTitle'=>'required|string',
+            'description'=>'required|string',
+            'image' => 'sometimes|mimes:png,jpg,jpeg|max:2048',
             'category_id' => 'required',
-    ],$message);
-    $cars = Car::find($id);
-    $cars->carTitle = $request->get('carTitle');
-    $cars->description = $request->get('description');
-    $cars->category_id = $request->get('category_id');
-    if ($request->hasFile('image')) {
+        ], $messages);
+       
+        $data['published'] = isset($request->published);
+
+        // update image if new file selected
+        if($request->hasFile('image')){
+            $fileName = $this->uploadFile($request->image, 'assets/images');
+            $data['image']= $fileName;
+        }
         
-        $imageName = time().'.'.$request->image->extension();  
-        $request->image->move(public_path('assets/images'), $imageName);
-        $cars->image = $imageName;
-    }
-    $cars->save();
-    return redirect('cars');
+
+        //return dd($data);
+        Car::where('id', $id)->update($data);
+       
      }
+     public function messages(){
+        return [
+            'carTitle.required'=>'Title is required',
+            'description.required'=> 'should be text',
+        ];
+    }
 
     /**
      * Remove the specified resource from storage.
