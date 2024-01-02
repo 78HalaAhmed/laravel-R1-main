@@ -11,7 +11,11 @@
 <body>
 
 <div class="container">
-  <h2>Contact us</h2>
+  <div>
+    <a href="{{ LaravelLocalization::getLocalizedURL('en') }}">english</a>
+    <a href="{{ LaravelLocalization::getLocalizedURL('ar') }}">arabic</a>
+  </div>
+  <h2>{{__('messages.ContactForm')}}</h2>
   <form action="{{ route('contact us') }}" method="post">
     @csrf
     <div class="form-group">

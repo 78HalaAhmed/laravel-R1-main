@@ -7,12 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Car;
 use App\Models\Category;
-use App\Traits\Common;
 use Illuminate\Support\Facades\Redirect;
-use Spatie\Backtrace\File;
+use App\Traits\Common;
 
 class CarController extends Controller
-{ use Common;
+{
+    use Common;
     private $columns = ['carTitle', 'description','published'];
 
     /**
@@ -28,9 +28,9 @@ class CarController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {  
-        $categories=Category::select('id','categoryName')->get();
-        return view('addCar',compact('categories'));
+    {
+        $categories = Category::select('id', 'categoryName')->get();
+        return view('addCar', compact('categories'));
     }
 
     /**
@@ -38,20 +38,19 @@ class CarController extends Controller
      */
     public function store(Request $request): RedirectResponse
     { 
-        $message=['carTitle.required'=>'CarTitle is required',
-        'description.required'=> 'should be text','image.required'=>'image required','price.required'=>'price required'];
-        $data=$request->validate([
+        $messages=$this->messages();
+        $data = $request->validate([
             'carTitle'=>'required|string',
             'description'=>'required|string|max:100',
             'image' => 'required|mimes:png,jpg,jpeg|max:2048',
-            'category_id' => 'required',
-        ],$message);  
+            'category_id' => 'required'
+        ], $messages);  
         $fileName = $this->uploadFile($request->image, 'assets/images');
-        $data['image']= $fileName;
-        $data['published'] = isset($request['published']);
+        $data['image'] = $fileName;
+        // $data['published'] = isset($request['published'])? true : false;
+        $data['published'] = isset($request['published']); // anthor way
         Car::create($data);        
-        // return redirect('cars');
-        return dd($data);
+        return redirect('cars');
         // $cars = new Car;
         // $cars->carTitle = $request->carTitle;
         // $cars->description = $request->description;
@@ -86,35 +85,26 @@ class CarController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id): RedirectResponse
     {
-        $messages= $this->messages();
-
+        $messages = $this->messages();
+            
         $data = $request->validate([
             'carTitle'=>'required|string',
-            'description'=>'required|string',
+            'description'=>'required|string|max:100',
             'image' => 'sometimes|mimes:png,jpg,jpeg|max:2048',
-            'category_id' => 'required',
+            'category_id' => 'required'
         ], $messages);
-       
-        $data['published'] = isset($request->published);
-
-        // update image if new file selected
-        if($request->hasFile('image')){
-            $fileName = $this->uploadFile($request->image, 'assets/images');
-            $data['image']= $fileName;
-        }
         
-
-        //return dd($data);
-        Car::where('id', $id)->update($data);
-       
-     }
-     public function messages(){
-        return [
-            'carTitle.required'=>'Title is required',
-            'description.required'=> 'should be text',
-        ];
+        // Update image if new file selected
+        if ($request->hasFile('image')) {
+            $fileName = $this->uploadFile($request->image, 'assets/images');
+            $data['image'] = $fileName;
+        }
+        // $data = $request->only($this->columns);
+        $data['published'] = isset($request['published'])? true : false;
+        Car::where('id', $id)->update($data);        
+        return redirect('cars');
     }
 
     /**
@@ -142,5 +132,16 @@ class CarController extends Controller
     {
         Car::where('id', $id)->forceDelete();
         return redirect('cars');
+    }
+
+    public function messages()
+    {
+        return [
+            'carTitle.required' => __('messages.carTitleValidate'),
+            'description.required' => __('messages.descriptionValidate'),
+            'image.required' => __('messages.imageValidate'),
+            'image.mimes' => __('messages.imageExtentionValidate'),
+            'category_id.required' => __('messages.categoryValidate')
+        ];
     }
 }

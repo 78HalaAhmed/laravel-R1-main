@@ -117,6 +117,8 @@ Route::get('/', function () {
 // example section
 
 // Route::get("test1",[ExampleController::class, "test1"]);
+Route::get("test",[ExampleController::class, "mySession"]);
+Route::get("getSession",[ExampleController::class, "getSession"]);
 
 // Route::get("addCarForm",[ExampleController::class, "addCarForm"]);
  Route::get('showupload',[ExampleController::class,'showupload']);
@@ -133,7 +135,7 @@ Route::get("addcar",[CarController::class, "create"]);
 
 Route::post("carInfo",[CarController::class, "store"])->name("carInfo");
 
-Route::get("cars",[CarController::class, "index"]);
+Route::get("cars",[CarController::class, "index"])->middleware('verified');
 
 Route::get('editCar/{id}',[CarController::class, 'edit']);
 
@@ -210,5 +212,13 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get("contact",[HomeController::class, "showcontact"]);
-Route::post("contact",[HomeController::class, "sendmail"])->name("contact us");
+Route::group(
+  [
+    'prefix' => LaravelLocalization::setLocale(),
+    'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]
+  ], function(){ Route::get("contact",[HomeController::class, "showcontact"]);
+    Route::post("contact",[HomeController::class, "sendmail"])->name("contact us");
+    Route::get("addcar",[CarController::class, "create"]);
+  });
+//Route::get("contact",[HomeController::class, "showcontact"]);
+//Route::post("contact",[HomeController::class, "sendmail"])->name("contact us");

@@ -26,6 +26,16 @@ class ExampleController extends Controller
         public function blog() {
             return view("blog");
         }
+        public function mySession() {
+        // session()->put('test', 'First Laravel session');
+        session()->flash('test', 'First Laravel session'); //run only  firstone and removed
+        // session()->forget('test'); //delete the session
+       
+        }
+        public function getSession(){
+            $data = session('test');
+            return view('session',compact('data')); 
+        }
     
     
     public function upload(Request $request) {
